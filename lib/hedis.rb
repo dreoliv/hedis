@@ -26,19 +26,19 @@ module Hedis
     def insert(data)
       script(LUA_SAVE, 0,
         { "name" => relation }.to_msgpack,
-        data.to_msgpack,
+        data.to_a.flatten.to_msgpack,
         {}.to_msgpack,
         {}.to_msgpack
       )
     end
 
-    private
-
-    attr_reader :relation
-
     def key(id)
       Nido.new(relation)[id]
     end
+
+    private
+
+    attr_reader :relation
 
     def redis
       Ohm.redis
